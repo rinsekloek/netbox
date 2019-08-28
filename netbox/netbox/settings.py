@@ -183,6 +183,7 @@ INSTALLED_APPS = [
     'utilities',
     'virtualization',
     'drf_yasg',
+    'nagios',
 ]
 
 # Only load django-rq if the webhook backend is enabled

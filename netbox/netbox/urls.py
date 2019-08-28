@@ -40,6 +40,7 @@ _patterns = [
     path(r'tenancy/', include('tenancy.urls')),
     path(r'user/', include('users.urls')),
     path(r'virtualization/', include('virtualization.urls')),
+    path(r'nagios/', include('nagios.urls')),
 
     # API
     path(r'api/', APIRootView.as_view(), name='api-root'),
