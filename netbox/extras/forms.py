@@ -8,9 +8,10 @@ from taggit.forms import TagField
 
 from dcim.models import DeviceRole, Platform, Region, Site
 from tenancy.models import Tenant, TenantGroup
+from utilities.constants import COLOR_CHOICES
 from utilities.forms import (
-    add_blank_choice, APISelectMultiple, BootstrapMixin, BulkEditForm, BulkEditNullBooleanSelect, CommentField,
-    ContentTypeSelect, FilterChoiceField, LaxURLField, JSONField, SlugField,
+    add_blank_choice, APISelectMultiple, BootstrapMixin, BulkEditForm, BulkEditNullBooleanSelect, ColorSelect,
+    CommentField, ContentTypeSelect, FilterChoiceField, LaxURLField, JSONField, SlugField,
 )
 from .constants import (
     CF_FILTER_DISABLED, CF_TYPE_BOOLEAN, CF_TYPE_DATE, CF_TYPE_INTEGER, CF_TYPE_SELECT, CF_TYPE_URL,
@@ -219,6 +220,21 @@ class TagFilterForm(BootstrapMixin, forms.Form):
     )
 
 
+class TagBulkEditForm(BootstrapMixin, BulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.MultipleHiddenInput
+    )
+    color = forms.CharField(
+        max_length=6,
+        required=False,
+        widget=ColorSelect()
+    )
+
+    class Meta:
+        nullable_fields = []
+
+
 #
 # Config contexts
 #
@@ -384,3 +400,34 @@ class ObjectChangeFilterForm(BootstrapMixin, forms.Form):
         widget=ContentTypeSelect(),
         label='Object Type'
     )
+
+
+#
+# Scripts
+#
+
+class ScriptForm(BootstrapMixin, forms.Form):
+    _commit = forms.BooleanField(
+        required=False,
+        initial=True,
+        label="Commit changes",
+        help_text="Commit changes to the database (uncheck for a dry-run)"
+    )
+
+    def __init__(self, vars, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        # Dynamically populate fields for variables
+        for name, var in vars.items():
+            self.fields[name] = var.as_field()
+
+        # Move _commit to the end of the form
+        self.fields.move_to_end('_commit', True)
+
+    @property
+    def requires_input(self):
+        """
+        A boolean indicating whether the form requires user input (ignore the _commit field).
+        """
+        return bool(len(self.fields) > 1)
