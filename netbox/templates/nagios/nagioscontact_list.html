@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+{% load buttons %}
+
+{% block content %}
+<div class="pull-right noprint">
+    {% if perms.nagios.add_nagioscontact %}
+        {% add_button 'nagios:nagioscontact_add' %}
+        {% import_button 'nagios:nagioscontact_import' %}
+    {% endif %}
+    {% export_button content_type %}
+</div>
+<h1>{% block title %}Nagios Contacts{% endblock %}</h1>
+<div class="row">
+	<div class="col-md-12">
+        {% include 'utilities/obj_table.html' with bulk_delete_url='nagios:nagioscontact_bulk_delete' %}
+    </div>
+</div>
+{% endblock %}

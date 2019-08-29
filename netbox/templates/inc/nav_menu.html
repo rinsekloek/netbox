@@ -419,23 +419,24 @@
                 <li class="dropdown{% if request.path|contains:'/nagios/' %} active{% endif %}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Nagios <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="dropdown-header">Nagios Checks</li>
-                        <li{% if not perms.secrets.view_secret %} class="disabled"{% endif %}>
-                            {% if perms.secrets.add_secret %}
+                        <li class="dropdown-header">Nagios</li>
+                        <li{% if not perms.nagios.view_secret %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagioscheck_ %}
                                 <div class="buttons pull-right">
-                                    <a href="{% url 'secrets:secret_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                    <a href="{% url 'nagios:nagioscheck_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagioscheck_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
                                 </div>
                             {% endif %}
                             <a href="{% url 'nagios:nagioscheck_list' %}">Nagios Checks</a>
                         </li>
-                        <li{% if not perms.secrets.view_secretrole %} class="disabled"{% endif %}>
-                            {% if perms.secrets.add_secretrole %}
+                        <li{% if not perms.nagios.view_nagioscontact %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagioscontact %}
                                 <div class="buttons pull-right">
-                                    <a href="{% url 'secrets:secretrole_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
-                                    <a href="{% url 'secrets:secretrole_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                    <a href="{% url 'nagios:nagioscontact_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagioscontact_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
                                 </div>
                             {% endif %}
-                            <a href="{% url 'nagios:nagioscheck_list' %}">Nagios Contacts</a>
+                            <a href="{% url 'nagios:nagioscontact_list' %}">Nagios Contacts</a>
                         </li>
                     </ul>
                 </li>

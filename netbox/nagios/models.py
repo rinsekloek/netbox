@@ -17,7 +17,7 @@ from extras.models import ConfigContextModel, CustomFieldModel, TaggedItem
 from utilities.models import ChangeLoggedModel
 
 
-class NagiosCheck(models.Model):
+class NagiosCheck(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
     check_name = models.CharField(max_length=255)
     check_command = models.CharField(max_length=512)
@@ -31,15 +31,15 @@ class NagiosCheck(models.Model):
         
     def __str__(self):
         return '%s ' % (self.check_name)
-        
-        
     
 
 
-class NagiosContactgroup(models.Model):
+class NagiosContactgroup(ChangeLoggedModel):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
     alias = models.CharField(max_length=255)
+    
+    csv_headers = ['name', 'alias']
 
     class Meta:
         managed = True
@@ -49,9 +49,11 @@ class NagiosContactgroup(models.Model):
         return '%s ' % (self.name)
 
 
-class NagiosContacts(models.Model):
+class NagiosContact(ChangeLoggedModel):
     id = models.IntegerField(primary_key=True)
     alias = models.CharField(max_length=255)
+    
+    csv_headers = ['alias', 'email']
     
     service_notification_period = models.ForeignKey('NagiosTimeperiods', models.DO_NOTHING, db_column='service_notification_period', related_name='service_notification_period')
     host_notification_period = models.ForeignKey('NagiosTimeperiods', models.DO_NOTHING, db_column='host_notification_period', related_name='host_notification_period')
@@ -60,7 +62,7 @@ class NagiosContacts(models.Model):
     host_notification_options = models.CharField(max_length=64)
     service_notification_commands = models.CharField(max_length=255)
     host_notification_commands = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
     pager = models.CharField(max_length=255)
 
     class Meta:
@@ -72,7 +74,7 @@ class NagiosContacts(models.Model):
 
 
 
-class NagiosHostgroups(models.Model):
+class NagiosHostgroups(ChangeLoggedModel):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
     alias = models.CharField(max_length=255)
@@ -83,7 +85,7 @@ class NagiosHostgroups(models.Model):
         db_table = 'nagios_hostgroups'
 
 
-class NagiosHosttemplates(models.Model):
+class NagiosHosttemplates(ChangeLoggedModel):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
     use_template = models.IntegerField(blank=True, null=True)
@@ -99,7 +101,7 @@ class NagiosHosttemplates(models.Model):
         db_table = 'nagios_hosttemplates'
 
 
-class NagiosServers(models.Model):
+class NagiosServers(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
     naam = models.CharField(max_length=255)
     ip = models.CharField(max_length=255)
@@ -116,7 +118,7 @@ class NagiosServers(models.Model):
         db_table = 'nagios_servers'
 
 
-class NagiosTimeperiods(models.Model):
+class NagiosTimeperiods(ChangeLoggedModel):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
     alias = models.CharField(max_length=255)
@@ -129,7 +131,7 @@ class NagiosTimeperiods(models.Model):
     def __str__(self):
         return '%s ' % (self.name)
 
-class NagiosService(models.Model):
+class NagiosService(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255)
     use_template = models.IntegerField(blank=True, null=True)
@@ -158,8 +160,8 @@ class NagiosService(models.Model):
         return '%s ' % (self.name)
 
 
-class NagiosContactgroupsMember(models.Model):
-    contact = models.ForeignKey(NagiosContacts, models.DO_NOTHING, db_column='contact', blank=True, null=True)
+class NagiosContactgroupsMember(ChangeLoggedModel):
+    contact = models.ForeignKey(NagiosContact, models.DO_NOTHING, db_column='contact', blank=True, null=True)
     contactgroup = models.ForeignKey(NagiosContactgroup, models.DO_NOTHING, db_column='contactgroup', blank=True, null=True)
 
     class Meta:
@@ -169,7 +171,7 @@ class NagiosContactgroupsMember(models.Model):
 
 
 
-class NagiosServicesContactgroups(models.Model):
+class NagiosServicesContactgroups(ChangeLoggedModel):
     service = models.ForeignKey(NagiosService, models.DO_NOTHING, db_column='service', blank=True, null=True)
     contactgroup = models.ForeignKey(NagiosContactgroup, models.DO_NOTHING, db_column='contactgroup', blank=True, null=True)
 
@@ -179,7 +181,7 @@ class NagiosServicesContactgroups(models.Model):
         unique_together = (('service', 'contactgroup'),)
 
 
-class NagiosPlatforms(models.Model):
+class NagiosPlatforms(ChangeLoggedModel):
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
