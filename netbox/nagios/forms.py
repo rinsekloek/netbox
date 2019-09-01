@@ -37,6 +37,9 @@ class NagiosCheckCSVForm(forms.ModelForm):
             'check_command': 'Full command of check including $ARGS$',
         }
 
+        
+# Nagios Contact
+        
 class NagiosContactForm(BootstrapMixin, forms.ModelForm):
     
     class Meta:
@@ -56,6 +59,101 @@ class NagiosContactCSVForm(forms.ModelForm):
             'alias': 'Name of the contact person',
             'email': 'E-mail address    ',
         }
+        
+# Nagios ContactGroup
+
+class NagiosContactGroupForm(BootstrapMixin, forms.ModelForm):
+    
+    class Meta:
+        model = NagiosContactGroup
+        fields = [
+            'name', 'alias','contacts'
+        ]
+
+
+
+class NagiosContactGroupCSVForm(forms.ModelForm):
+
+    class Meta:
+        model = NagiosContactGroup
+        fields = NagiosContactGroup.csv_headers
+        help_texts = {
+            'name': 'Name of the contactgroup',
+            'alias': 'Extended name of the contacgroup',
+        }       
+
+        
+# Nagios ContactGroup
+
+class NagiosHostGroupForm(BootstrapMixin, forms.ModelForm):
+    
+    class Meta:
+        model = NagiosHostGroup
+        fields = [
+            'name', 'alias','platform'
+        ]
+
+
+
+class NagiosHostGroupCSVForm(forms.ModelForm):
+
+    class Meta:
+        model = NagiosHostGroup
+        fields = NagiosHostGroup.csv_headers
+        help_texts = {
+            'name': 'Name of the contactgroup',
+            'alias': 'Extended name of the contacgroup',
+        }       
+ 
+
+
+# Nagios Service        
+        
+class NagiosServiceForm(BootstrapMixin, forms.ModelForm):
+    
+    class Meta:
+        model = NagiosService
+        fields = [
+            'id', 'name', 'use_template', 'device', 'service_description', 'active_checks_enabled', 
+            'passive_checks_enabled', 'check_command', 'check_command_params', 'max_check_attempts', 
+            'normal_check_interval', 'retry_check_interval', 'notification_interval', 'notification_period', 
+            'notification_options','notifications_enabled', 'check_period', 'event_handler', 'contact_groups'                  
+        ]
+
+
+
+class NagiosServiceCSVForm(forms.ModelForm):
+
+    class Meta:
+        model = NagiosService
+        fields = NagiosService.csv_headers
+        help_texts = {
+            'name': 'Name of the service',
+            'device': 'Device',
+        }
+        
+        
+# Nagios Platform     
+
+class NagiosPlatformForm(BootstrapMixin, forms.ModelForm):
+    
+    class Meta:
+        model = NagiosPlatform
+        fields = [
+            'name'
+        ]
+
+
+
+class NagiosPlatformCSVForm(forms.ModelForm):
+
+    class Meta:
+        model = NagiosPlatform
+        fields = NagiosPlatform.csv_headers
+        help_texts = {
+            'name': 'Name of the platform',
+        }       
+ 
 
 
 

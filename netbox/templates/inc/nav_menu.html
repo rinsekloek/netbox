@@ -423,7 +423,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Nagios <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">Nagios</li>
-                        <li{% if not perms.nagios.view_secret %} class="disabled"{% endif %}>
+                        <li{% if not perms.nagios.view_nagios %} class="disabled"{% endif %}>
                             {% if perms.nagios.add_nagioscheck_ %}
                                 <div class="buttons pull-right">
                                     <a href="{% url 'nagios:nagioscheck_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
@@ -440,6 +440,42 @@
                                 </div>
                             {% endif %}
                             <a href="{% url 'nagios:nagioscontact_list' %}">Nagios Contacts</a>
+                        </li>
+                        <li{% if not perms.nagios.view_nagioscontactgroup %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagioscontactgroup %}
+                                <div class="buttons pull-right">
+                                    <a href="{% url 'nagios:nagioscontactgroup_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagioscontactgroup_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                </div>
+                            {% endif %}
+                            <a href="{% url 'nagios:nagioscontactgroup_list' %}">Nagios Contactgroups</a>
+                         </li>
+                         <li{% if not perms.nagios.view_nagioshostgroup %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagioshostgroup %}
+                                <div class="buttons pull-right">
+                                    <a href="{% url 'nagios:nagioshostgroup_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagioshostgroup_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                </div>
+                            {% endif %}
+                            <a href="{% url 'nagios:nagioshostgroup_list' %}">Nagios Hostgroups</a>
+                        </li>                          
+                        <li{% if not perms.nagios.view_nagiosservice %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagiosservoice %}
+                                <div class="buttons pull-right">
+                                    <a href="{% url 'nagios:nagiosservice_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagiosservice_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                </div>
+                            {% endif %}
+                            <a href="{% url 'nagios:nagiosservice_list' %}">Nagios Services</a>
+                        </li>
+                        <li{% if not perms.nagios.view_nagiosplatform %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagiosservoice %}
+                                <div class="buttons pull-right">
+                                    <a href="{% url 'nagios:nagiosplatform_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagiosplatform_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                </div>
+                            {% endif %}
+                            <a href="{% url 'nagios:nagiosplatform_list' %}">Nagios Platforms</a>
                         </li>
                     </ul>
                 </li>

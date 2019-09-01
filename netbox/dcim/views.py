@@ -959,6 +959,9 @@ class DeviceView(PermissionRequiredMixin, View):
 
         # Services
         services = device.services.all()
+        
+        # Nagios Services
+        nagios_services = device.nagiosservices.all()
 
         # Secrets
         secrets = device.secrets.all()
@@ -986,6 +989,7 @@ class DeviceView(PermissionRequiredMixin, View):
             'front_ports': front_ports,
             'rear_ports': rear_ports,
             'services': services,
+            'nagios_services': nagios_services,
             'secrets': secrets,
             'vc_members': vc_members,
             'related_devices': related_devices,

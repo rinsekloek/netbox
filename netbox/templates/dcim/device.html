@@ -437,6 +437,29 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
+                    <strong>Nagios Services</strong>
+                </div>
+                {% if nagios_services %}
+                    <table class="table table-hover panel-body">
+                        {% for nagiosservice in nagios_services %}
+                            {% include 'nagios/inc/nagiosservice.html' %}
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <div class="panel-body text-muted">
+                        None
+                    </div>
+                {% endif %}
+                {% if perms.nagios.add_nagiosservice %}
+                    <div class="panel-footer text-right noprint">
+                        <a href="{% url 'dcim:device_nagiosservice_assign' device=device.pk %}" class="btn btn-xs btn-primary">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Assign Nagios service
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
                     <strong>Images</strong>
                 </div>
                 {% include 'inc/image_attachments.html' with images=device.images.all %}

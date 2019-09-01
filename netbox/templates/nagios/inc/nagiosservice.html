@@ -1,0 +1,27 @@
+<tr>
+    <td>
+        <a href="{{ nagiosservice.get_absolute_url }}">{{ nagiosservice.name }}</a>
+    </td>
+    <td>
+        {{ nagiosservice.service_description }}
+    </td>
+    <td>
+        {{ nagiosservice.template }}
+    </td>
+    
+    <td class="text-right noprint">
+        <a href="{% url 'nagios:nagiosservice_changelog' pk=nagiosservice.pk %}" class="btn btn-default btn-xs" title="Changelog">
+            <i class="fa fa-history"></i>
+        </a>
+        {% if perms.nagios.change_nagiosservice %}
+            <a href="{% url 'nagios:nagiosservice_edit' pk=nagiosservice.pk %}" class="btn btn-info btn-xs" title="Edit service">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </a>
+        {% endif %}
+        {% if perms.nagios.delete_service %}
+            <a href="{% url 'nagios:nagiosservice_delete' pk=nagiosservice.pk %}?return_url={{ nagiosservice.parent.get_absolute_url }}" class="btn btn-danger btn-xs">
+                <i class="glyphicon glyphicon-trash" title="Delete service"></i>
+            </a>
+        {% endif %}
+    </td>
+</tr>

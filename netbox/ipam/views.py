@@ -1001,9 +1001,11 @@ class ServiceCreateView(PermissionRequiredMixin, ObjectEditView):
         elif 'virtualmachine' in url_kwargs:
             obj.virtual_machine = get_object_or_404(VirtualMachine, pk=url_kwargs['virtualmachine'])
         return obj
+        
 
     def get_return_url(self, request, service):
         return service.parent.get_absolute_url()
+
 
 
 class ServiceEditView(ServiceCreateView):

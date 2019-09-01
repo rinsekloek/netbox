@@ -2,6 +2,7 @@ from django.urls import path
 
 from extras.views import ObjectChangeLogView, ImageAttachmentEditView
 from ipam.views import ServiceCreateView
+from nagios.views import NagiosServiceCreateView
 from secrets.views import secret_add
 from . import views
 from .models import (
@@ -157,6 +158,7 @@ urlpatterns = [
     path(r'devices/<int:pk>/config/', views.DeviceConfigView.as_view(), name='device_config'),
     path(r'devices/<int:pk>/add-secret/', secret_add, name='device_addsecret'),
     path(r'devices/<int:device>/services/assign/', ServiceCreateView.as_view(), name='device_service_assign'),
+    path(r'devices/<int:device>/nagiosservices/assign/', NagiosServiceCreateView.as_view(), name='device_nagiosservice_assign'),
     path(r'devices/<int:object_id>/images/add/', ImageAttachmentEditView.as_view(), name='device_add_image', kwargs={'model': Device}),
 
     # Console ports

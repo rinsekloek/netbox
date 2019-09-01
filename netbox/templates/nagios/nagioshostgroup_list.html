@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+{% load buttons %}
+
+{% block content %}
+<div class="pull-right noprint">
+    {% if perms.nagios.add_nagioshostgroup %}
+        {% add_button 'nagios:nagioshostgroup_add' %}
+        {% import_button 'nagios:nagioshostgroup_import' %}
+    {% endif %}
+    {% export_button content_type %}
+</div>
+<h1>{% block title %}Nagios Hostgroups{% endblock %}</h1>
+<div class="row">
+	<div class="col-md-12">
+        {% include 'utilities/obj_table.html' with bulk_delete_url='nagios:nagioshostgroup_bulk_delete' %}
+    </div>
+</div>
+{% endblock %}

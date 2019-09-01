@@ -1,0 +1,59 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load custom_links %}
+{% load helpers %}
+
+{% block title %}{{ contactgroup }}{% endblock %}
+
+{% block header %}
+   
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Contacts</strong>
+            </div>
+            <table class="table table-hover panel-body">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>E-mail</th>
+                </tr>
+                {% for c in nagios %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'nagios:contact' pk=c.pk %}">{{ c.cid }}</a>
+                        </td>
+                         <td>
+                            {% if c.name %}
+                                <a href="{% url 'dcim:site' slug=c.name %}">{{ c.termination_z.site }}</a>
+                            {% else %}
+                                <span class="text-muted">&mdash;</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if c.email %}
+                                {{ c.email }}
+                            {% else %}
+                                <span class="text-muted">&mdash;</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-muted">None</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% include 'inc/modal.html' with modal_name='graphs' %}
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/graphs.js' %}?v{{ settings.VERSION }}"></script>
+{% endblock %}

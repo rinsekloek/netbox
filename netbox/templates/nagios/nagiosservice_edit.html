@@ -1,0 +1,38 @@
+{% extends 'utilities/obj_edit.html' %}
+{% load form_helpers %}
+
+{% block form %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Nagios Service</strong></div>
+        <div class="panel-body">
+            {% render_field form.device %}     
+            {% render_field form.use_template %}     
+            {% render_field form.name %}                        
+            {% render_field form.service_description %}  
+        </div>
+        <div class="panel-heading"><strong>Check settings</strong></div>
+        <div class="panel-body">    
+            {% render_field form.active_checks_enabled %}       
+            {% render_field form.passive_checks_enabled %}  
+            
+            {% render_field form.check_command %}               
+            {% render_field form.check_command_params %} 
+            {% render_field form.check_period %}               
+
+            {% render_field form.max_check_attempts %}          
+            {% render_field form.normal_check_interval %}       
+            {% render_field form.retry_check_interval %}  
+        </div>
+        <div class="panel-heading"><strong>Notification settings</strong></div>
+        <div class="panel-body">
+            
+            {% render_field form.notifications_enabled %}
+            {% render_field form.notification_interval %}       
+            {% render_field form.notification_period %}         
+            {% render_field form.notification_options %}        
+                   
+            {% render_field form.event_handler %}               
+            {% render_field form.contact_groups %}              
+        </div>
+    </div>
+{% endblock %}

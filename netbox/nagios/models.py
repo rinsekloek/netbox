@@ -1,19 +1,16 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import F, Q
+from django.db.models.expressions import RawSQL
 from django.urls import reverse
 from taggit.managers import TaggableManager
 
 from dcim.models import *
-from extras.models import ConfigContextModel, CustomFieldModel, TaggedItem
+from extras.models import CustomFieldModel, ObjectChange, TaggedItem, ConfigContextModel
+from utilities.models import ChangeLoggedModel
+from utilities.utils import serialize_object
 from utilities.models import ChangeLoggedModel
 
 
@@ -34,27 +31,9 @@ class NagiosCheck(ChangeLoggedModel):
     
 
 
-class NagiosContactgroup(ChangeLoggedModel):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(unique=True, max_length=255)
-    alias = models.CharField(max_length=255)
-    
-    csv_headers = ['name', 'alias']
-
-    class Meta:
-        managed = True
-        db_table = 'nagios_contactgroups'
-        
-    def __str__(self):
-        return '%s ' % (self.name)
-
-
 class NagiosContact(ChangeLoggedModel):
-    id = models.IntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     alias = models.CharField(max_length=255)
-    
-    csv_headers = ['alias', 'email']
-    
     service_notification_period = models.ForeignKey('NagiosTimeperiods', models.DO_NOTHING, db_column='service_notification_period', related_name='service_notification_period')
     host_notification_period = models.ForeignKey('NagiosTimeperiods', models.DO_NOTHING, db_column='host_notification_period', related_name='host_notification_period')
     
@@ -64,7 +43,9 @@ class NagiosContact(ChangeLoggedModel):
     host_notification_commands = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
     pager = models.CharField(max_length=255)
-
+    
+    csv_headers = ['alias', 'email']
+    
     class Meta:
         managed = True
         db_table = 'nagios_contacts'
@@ -72,21 +53,42 @@ class NagiosContact(ChangeLoggedModel):
     def __str__(self):
         return '%s ' % (self.alias)
 
-
-
-class NagiosHostgroups(ChangeLoggedModel):
-    id = models.IntegerField(primary_key=True)
+class NagiosContactGroup(ChangeLoggedModel):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
     alias = models.CharField(max_length=255)
-    platform = models.ForeignKey('NagiosPlatforms', models.DO_NOTHING, db_column='platform', blank=True, null=True)
+    
+    contacts = models.ManyToManyField(NagiosContact)
+    
+    csv_headers = ['name', 'alias', 'contacts']
 
     class Meta:
         managed = True
+        db_table = 'nagios_contactgroups'
+        
+    def __str__(self):
+        return '%s ' % (self.name)
+        
+
+
+class NagiosHostGroup(ChangeLoggedModel):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(unique=True, max_length=255)
+    alias = models.CharField(max_length=255)
+    platform = models.ForeignKey('NagiosPlatform', models.DO_NOTHING, db_column='platform', blank=True, null=True)
+
+    csv_headers = ['id','name', 'alias', 'platform']
+    
+    class Meta:
+        managed = True
         db_table = 'nagios_hostgroups'
+        
+    def __str__(self):
+        return '%s ' % (self.name)
 
 
 class NagiosHosttemplates(ChangeLoggedModel):
-    id = models.IntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
     use_template = models.IntegerField(blank=True, null=True)
     check_command = models.ForeignKey(NagiosCheck, models.DO_NOTHING, db_column='check_command', blank=True, null=True)
@@ -99,6 +101,9 @@ class NagiosHosttemplates(ChangeLoggedModel):
     class Meta:
         managed = True
         db_table = 'nagios_hosttemplates'
+        
+    def __str__(self):
+        return '%s ' % (self.name)
 
 
 class NagiosServers(ChangeLoggedModel):
@@ -111,15 +116,18 @@ class NagiosServers(ChangeLoggedModel):
     configpath_remote = models.CharField(max_length=255)
     configpath_local = models.CharField(max_length=255)
     initscript = models.CharField(max_length=255)
-    platform = models.ForeignKey('NagiosPlatforms', models.DO_NOTHING, db_column='platform', blank=True, null=True)
+    platform = models.ForeignKey('NagiosPlatform', models.DO_NOTHING, db_column='platform', blank=True, null=True)
 
     class Meta:
         managed = True
         db_table = 'nagios_servers'
+        
+    def __str__(self):
+        return '%s ' % (self.name)
 
 
 class NagiosTimeperiods(ChangeLoggedModel):
-    id = models.IntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=255)
     alias = models.CharField(max_length=255)
     timespan = models.TextField()
@@ -133,57 +141,52 @@ class NagiosTimeperiods(ChangeLoggedModel):
 
 class NagiosService(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-    use_template = models.IntegerField(blank=True, null=True)
-    server = models.ForeignKey('dcim.Device', models.DO_NOTHING, db_column='server', blank=True, null=True, related_name='server')
-    service_description = models.CharField(max_length=255)
-    active_checks_enabled = models.SmallIntegerField(blank=True, null=True)
-    passive_checks_enabled = models.SmallIntegerField(blank=True, null=True)
-    check_command = models.ForeignKey(NagiosCheck, models.DO_NOTHING, db_column='check_command')
-    check_command_params = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='Template name', blank=True, null=True)
+    use_template = models.ForeignKey('self', on_delete=models.CASCADE, db_column='use_template', null=True, blank=True, verbose_name='Inherits from template')
+    device = models.ForeignKey(to='dcim.Device', on_delete=models.CASCADE, db_column='server', blank=True, null=True, related_name='nagiosservices', verbose_name='device'  )
+    service_description = models.CharField(max_length=255,verbose_name='Service Description')
+    active_checks_enabled = models.BooleanField(blank=True, null=True)
+    passive_checks_enabled = models.BooleanField(blank=True, null=True)
+    check_command = models.ForeignKey(NagiosCheck, models.DO_NOTHING, db_column='check_command', blank=True, null=True)
+    check_command_params = models.CharField(max_length=255, blank=True, null=True)
     max_check_attempts = models.IntegerField(blank=True, null=True)
     normal_check_interval = models.IntegerField(blank=True, null=True)
     retry_check_interval = models.IntegerField(blank=True, null=True)
     notification_interval = models.SmallIntegerField(blank=True, null=True)
     notification_period = models.ForeignKey(NagiosTimeperiods, models.DO_NOTHING, db_column='notification_period', blank=True, null=True, related_name='notification_period' )
     notification_options = models.CharField(max_length=64, blank=True, null=True)
-    notifications_enabled = models.SmallIntegerField(blank=True, null=True)
-    check_period = models.ForeignKey(NagiosTimeperiods, models.DO_NOTHING, db_column='check_period', related_name='check_period')
+    notifications_enabled = models.BooleanField(blank=True, null=True)
+    check_period = models.ForeignKey(NagiosTimeperiods, models.DO_NOTHING, db_column='check_period', related_name='check_period', blank=True, null=True)
     event_handler = models.CharField(max_length=255, blank=True, null=True)
-    contact_groups = models.TextField(blank=True, null=True)  # This field type is a guess.
+    contact_groups = models.ManyToManyField(NagiosContactGroup)  
 
+    csv_headers = ['id', 'name', 'device']
+    
     class Meta:
         managed = True
         db_table = 'nagios_services'
     
     def __str__(self):
         return '%s ' % (self.name)
+        
+    def get_absolute_url(self):
+        return reverse('nagios:nagiosservice', args=[self.pk])
+        
+    @property
+    def parent(self):
+        return self.device
+           
+            
 
-
-class NagiosContactgroupsMember(ChangeLoggedModel):
-    contact = models.ForeignKey(NagiosContact, models.DO_NOTHING, db_column='contact', blank=True, null=True)
-    contactgroup = models.ForeignKey(NagiosContactgroup, models.DO_NOTHING, db_column='contactgroup', blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'nagios_contactgroups_members'
-        unique_together = (('contact', 'contactgroup'),)
-
-
-
-class NagiosServicesContactgroups(ChangeLoggedModel):
-    service = models.ForeignKey(NagiosService, models.DO_NOTHING, db_column='service', blank=True, null=True)
-    contactgroup = models.ForeignKey(NagiosContactgroup, models.DO_NOTHING, db_column='contactgroup', blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'nagios_services_contactgroups'
-        unique_together = (('service', 'contactgroup'),)
-
-
-class NagiosPlatforms(ChangeLoggedModel):
+class NagiosPlatform(ChangeLoggedModel):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
+    csv_headers = ['id','name']    
+    
     class Meta:
         managed = True
         db_table = 'nagios_platforms'
+        
+    def __str__(self):
+        return '%s ' % (self.name)
