@@ -1569,6 +1569,43 @@ class Device(ChangeLoggedModel, ConfigContextModel, CustomFieldModel):
     images = GenericRelation(
         to='extras.ImageAttachment'
     )
+    
+    # Nagios Fields
+    nagios_enabled =  models.BooleanField(
+        default=False,
+        verbose_name='Nagios Services Enabled',
+        help_text='Set to yes to enable nagios check for this device'
+    )
+    nagios_hosttemplate = models.ForeignKey(
+        to='nagios.NagiosHostTemplate',
+        on_delete=models.SET_NULL,
+        related_name='devices',
+        blank=True,
+        null=True
+    )
+    
+    nagios_hostgroup = models.ForeignKey(
+        to='nagios.NagiosHostGroup',
+        on_delete=models.SET_NULL,
+        related_name='devices',
+        blank=True,
+        null=True
+    )
+    
+    nagios_contactgroup = models.ForeignKey(
+        to='nagios.NagiosContactGroup',
+        on_delete=models.SET_NULL,
+        related_name='devices',
+        blank=True,
+        null=True
+    )
+    nagios_parents = models.ManyToManyField(
+        to='self',
+        related_name='devices',
+        blank=True,
+        verbose_name='Nagios Device Parents'
+    )  
+    
 
     objects = NaturalOrderingManager()
     tags = TaggableManager(through=TaggedItem)

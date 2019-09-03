@@ -50,15 +50,28 @@ NAGIOSHOSTGROUP_ACTIONS = """
 {% endif %}
 """
 
-NAGIOSPLATFORM_ACTIONS = """
-<a href="{% url 'nagios:nagiosplatform_changelog' pk=record.pk %}" class="btn btn-default btn-xs" title="Changelog">
+NAGIOSHOSTTEMPLATE_ACTIONS = """
+<a href="{% url 'nagios:nagioshosttemplate_changelog' pk=record.pk %}" class="btn btn-default btn-xs" title="Changelog">
     <i class="fa fa-history"></i>
 </a>
-{% if perms.nagios.change_nagiosplatform %}
-    <a href="{% url 'nagios:nagiosplatform_edit'  pk=record.pk %}?return_url={{ request.path }}" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></a>
+{% if perms.nagios.change_nagioshosttemplate %}
+    <a href="{% url 'nagios:nagioshosttemplate_edit'  pk=record.pk %}?return_url={{ request.path }}" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></a>
 {% endif %}
 """
 
+
+NAGIOSTIMEPERIOD_ACTIONS = """
+<a href="{% url 'nagios:nagiostimeperiod_changelog' pk=record.pk %}" class="btn btn-default btn-xs" title="Changelog">
+    <i class="fa fa-history"></i>
+</a>
+{% if perms.nagios.change_nagiostimeperiod %}
+    <a href="{% url 'nagios:nagiostimeperiod_edit'  pk=record.pk %}?return_url={{ request.path }}" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></a>
+{% endif %}
+"""
+
+PLATFORM_DEVICES = """
+<a href="{% url 'dcim:device_list' %}?id={{ record.platform.pk }}">{{ value }}</a>
+"""
 #
 # Nagios checks
 #
@@ -93,6 +106,7 @@ class NagiosContactTable(BaseTable):
 class NagiosContactGroupTable(BaseTable):
     pk = ToggleColumn()
     
+    
     actions = tables.TemplateColumn(
         template_code=NAGIOSCONTACTGROUP_ACTIONS,
         attrs={'td': {'class': 'text-right noprint'}},
@@ -106,6 +120,17 @@ class NagiosContactGroupTable(BaseTable):
 class NagiosHostGroupTable(BaseTable):
     pk = ToggleColumn()
     
+    #platform = tables.LinkColumn(
+    #    viewname='dcim:platform_edit',
+    #    args=[Accessor('dcim.slug')]
+    #)
+    platform = tables.TemplateColumn(
+        template_code=PLATFORM_DEVICES,
+        attrs={'slug': 'dcim.platform.slug'},
+        orderable=False,
+        verbose_name='Platform devices'
+    )
+    
     actions = tables.TemplateColumn(
         template_code=NAGIOSHOSTGROUP_ACTIONS,
         attrs={'td': {'class': 'text-right noprint'}},
@@ -116,12 +141,33 @@ class NagiosHostGroupTable(BaseTable):
         model = NagiosHostGroup
         fields = ('pk', 'name', 'alias','platform')
 
+        
+class NagiosHostTemplateTable(BaseTable):
+    pk = ToggleColumn()
+    
+    #use_template = tables.LinkColumn('nagioshosttemplate_edit', args=[Accessor('pk')])
+        
+    actions = tables.TemplateColumn(
+        template_code=NAGIOSHOSTTEMPLATE_ACTIONS,
+        attrs={'td': {'class': 'text-right noprint'}},
+        verbose_name=''
+    )
+
+    class Meta(BaseTable.Meta):
+        model = NagiosHostTemplate
+        fields = ('pk', 'name', 'use_template', 'check_command', 'max_check_attempts', 'notification_interval', 'notification_period', 'notification_options', 'notifications_enabled')
+
          
 class NagiosServiceTable(BaseTable):
     pk = ToggleColumn()
-    name = tables.LinkColumn(
-        viewname='nagios:nagiosservice',
+    use_template = tables.LinkColumn(
+        viewname='nagios:nagiosservice_edit',
         args=[Accessor('pk')]
+    )
+    
+    device = tables.LinkColumn(
+        viewname='dcim:device',
+        args=[Accessor('device.pk')]
     )
     
     actions = tables.TemplateColumn(
@@ -135,18 +181,18 @@ class NagiosServiceTable(BaseTable):
         fields = ('pk', 'name', 'use_template', 'device', 'service_description','contact_groups')
 
         
-class NagiosPlatformTable(BaseTable):
+class NagiosTimePeriodTable(BaseTable):
     pk = ToggleColumn()
     
     actions = tables.TemplateColumn(
-        template_code=NAGIOSPLATFORM_ACTIONS,
+        template_code=NAGIOSTIMEPERIOD_ACTIONS,
         attrs={'td': {'class': 'text-right noprint'}},
         verbose_name=''
     )
 
     class Meta(BaseTable.Meta):
-        model = NagiosPlatform
-        fields = ('pk', 'name')
+        model = NagiosTimePeriod
+        fields = ('pk', 'name', 'alias', 'timespan')
 
 
 

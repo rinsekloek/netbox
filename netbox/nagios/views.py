@@ -147,7 +147,40 @@ class NagiosHostGroupBulkDeleteView(PermissionRequiredMixin, BulkDeleteView):
     queryset = NagiosHostGroup.objects.annotate(nagioshostgroup_count=Count('id'))
     table = tables.NagiosHostGroupTable
     default_return_url = 'nagios:nagioshostgroup_list'
-  
+
+
+# Nagios HostTemplate
+
+class NagiosHostTemplateListView(PermissionRequiredMixin, ObjectListView):
+    permission_required = 'nagios.view_NagiosHostTemplate'
+    queryset = NagiosHostTemplate.objects.annotate(nagioshosttemplate_count=Count('id'))
+    table = tables.NagiosHostTemplateTable
+    template_name = 'nagios/nagioshosttemplate_list.html'
+
+
+class NagiosHostTemplateCreateView(PermissionRequiredMixin, ObjectEditView):
+    permission_required = 'nagios.add_nagioshosttemplate'
+    model = NagiosHostTemplate
+    model_form = forms.NagiosHostTemplateForm
+    default_return_url = 'nagios:nagioshosttemplate_list'
+
+
+class NagiosHostTemplateEditView(NagiosHostTemplateCreateView):
+    permission_required = 'nagios.change_nagioshosttemplate'
+
+
+class NagiosHostTemplateBulkImportView(PermissionRequiredMixin, BulkImportView):
+    permission_required = 'nagios.add_NagiosHostTemplate'
+    model_form = forms.NagiosHostTemplateCSVForm
+    table = tables.NagiosHostTemplateTable
+    default_return_url = 'nagios:nagioshosttemplate_list'
+
+
+class NagiosHostTemplateBulkDeleteView(PermissionRequiredMixin, BulkDeleteView):
+    permission_required = 'nagios.delete_NagiosHostTemplate'
+    queryset = NagiosHostTemplate.objects.annotate(nagioshosttemplate_count=Count('id'))
+    table = tables.NagiosHostTemplateTable
+    default_return_url = 'nagios:nagioshosttemplate_list'    
     
 # Nagios Service
 
@@ -210,39 +243,38 @@ class NagiosServiceBulkDeleteView(PermissionRequiredMixin, BulkDeleteView):
     default_return_url = 'nagios:nagiosservice_list'
 
 
-# Nagios Platform
+# Nagios TimePeriod
 
-class NagiosPlatformListView(PermissionRequiredMixin, ObjectListView):
-    permission_required = 'nagios.view_NagiosPlatform'
-    queryset = NagiosPlatform.objects.annotate(nagiosplatform_count=Count('id'))
-    table = tables.NagiosPlatformTable
-    template_name = 'nagios/nagiosplatform_list.html'
-
-
-class NagiosPlatformCreateView(PermissionRequiredMixin, ObjectEditView):
-    permission_required = 'nagios.add_nagiosplatform'
-    model = NagiosPlatform
-    model_form = forms.NagiosPlatformForm
-    default_return_url = 'nagios:nagiosplatform_list'
+class NagiosTimePeriodListView(PermissionRequiredMixin, ObjectListView):
+    permission_required = 'nagios.view_NagiosTimePeriod'
+    queryset = NagiosTimePeriod.objects.annotate(nagiostimeperiod_count=Count('id'))
+    table = tables.NagiosTimePeriodTable
+    template_name = 'nagios/nagiostimeperiod_list.html'
 
 
-class NagiosPlatformEditView(NagiosPlatformCreateView):
-    permission_required = 'nagios.change_nagiosplatform'
+class NagiosTimePeriodCreateView(PermissionRequiredMixin, ObjectEditView):
+    permission_required = 'nagios.add_nagiostimeperiod'
+    model = NagiosTimePeriod
+    model_form = forms.NagiosTimePeriodForm
+    default_return_url = 'nagios:nagiostimeperiod_list'
 
 
-
-class NagiosPlatformBulkImportView(PermissionRequiredMixin, BulkImportView):
-    permission_required = 'nagios.add_NagiosPlatform'
-    model_form = forms.NagiosPlatformCSVForm
-    table = tables.NagiosPlatformTable
-    default_return_url = 'nagios:nagiosplatform_list'
+class NagiosTimePeriodEditView(NagiosTimePeriodCreateView):
+    permission_required = 'nagios.change_nagiostimeperiod'
 
 
-class NagiosPlatformBulkDeleteView(PermissionRequiredMixin, BulkDeleteView):
-    permission_required = 'nagios.delete_NagiosPlatform'
-    queryset = NagiosPlatform.objects.annotate(nagiosplatform_count=Count('id'))
-    table = tables.NagiosPlatformTable
-    default_return_url = 'nagios:nagiosplatform_list'
+class NagiosTimePeriodBulkImportView(PermissionRequiredMixin, BulkImportView):
+    permission_required = 'nagios.add_NagiosTimePeriod'
+    model_form = forms.NagiosTimePeriodCSVForm
+    table = tables.NagiosTimePeriodTable
+    default_return_url = 'nagios:nagiostimeperiod_list'
+
+
+class NagiosTimePeriodBulkDeleteView(PermissionRequiredMixin, BulkDeleteView):
+    permission_required = 'nagios.delete_NagiosTimePeriod'
+    queryset = NagiosTimePeriod.objects.annotate(nagiostimeperiod_count=Count('id'))
+    table = tables.NagiosTimePeriodTable
+    default_return_url = 'nagios:nagiostimeperiod_list'
 
 
 

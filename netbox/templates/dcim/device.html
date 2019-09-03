@@ -295,6 +295,43 @@
                     {% endif %}
                 </table>
             </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Nagios</strong>
+                </div>
+                <table class="table table-hover panel-body attr-table">
+                     <tr>
+                        <td>Nagios Enabled</td>
+                        <td>
+                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_enabled }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nagios Hosttemplate</td>
+                        <td>
+                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_hosttemplate }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nagios Hostgroup</td>
+                        <td>
+                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_hostgroup }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nagios Contactgroup</td>
+                        <td>
+                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_contactgroup }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nagios Parent Devices</td>
+                        <td>
+                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_parents }}</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
             {% include 'inc/custom_fields_panel.html' with obj=device %}
             {% include 'extras/inc/tags_panel.html' with tags=device.tags.all url='dcim:device_list' %}
             <div class="panel panel-default">

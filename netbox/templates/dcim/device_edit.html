@@ -56,10 +56,21 @@
         <div class="panel-body">
             {% render_field form.status %}
             {% render_field form.platform %}
+
             {% if obj.pk %}
                 {% render_field form.primary_ip4 %}
                 {% render_field form.primary_ip6 %}
             {% endif %}
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Nagios</strong></div>
+        <div class="panel-body">
+            {% render_field form.nagios_enabled %}
+            {% render_field form.nagios_hosttemplate %}
+            {% render_field form.nagios_hostgroup %}
+            {% render_field form.nagios_contactgroup %}
+            {% render_field form.nagios_parents %}
         </div>
     </div>
     <div class="panel panel-default">

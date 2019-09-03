@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+{% load buttons %}
+
+{% block content %}
+<div class="pull-right noprint">
+    {% if perms.nagios.add_nagioshosttemplate %}
+        {% add_button 'nagios:nagioshosttemplate_add' %}
+        {% import_button 'nagios:nagioshosttemplate_import' %}
+    {% endif %}
+    {% export_button content_type %}
+</div>
+<h1>{% block title %}Nagios Hosttemplates{% endblock %}</h1>
+<div class="row">
+	<div class="col-md-12">
+        {% include 'utilities/obj_table.html' with bulk_delete_url='nagios:nagioshosttemplate_bulk_delete' %}
+    </div>
+</div>
+{% endblock %}

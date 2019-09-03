@@ -566,7 +566,7 @@ class DeviceDetailTable(DeviceTable):
 
     class Meta(DeviceTable.Meta):
         model = Device
-        fields = ('pk', 'name', 'status', 'tenant', 'site', 'rack', 'device_role', 'device_type', 'primary_ip')
+        fields = ('pk', 'name', 'status', 'tenant', 'site', 'rack', 'device_role', 'device_type', 'primary_ip', 'nagios_enabled')
 
 
 class DeviceImportTable(BaseTable):

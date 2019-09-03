@@ -83,7 +83,7 @@ class NagiosContactGroupCSVForm(forms.ModelForm):
         }       
 
         
-# Nagios ContactGroup
+# Nagios HostGroup
 
 class NagiosHostGroupForm(BootstrapMixin, forms.ModelForm):
     
@@ -104,6 +104,28 @@ class NagiosHostGroupCSVForm(forms.ModelForm):
             'name': 'Name of the contactgroup',
             'alias': 'Extended name of the contacgroup',
         }       
+        
+# Nagios HostTemplate
+ 
+class NagiosHostTemplateForm(BootstrapMixin, forms.ModelForm):
+    
+    class Meta:
+        model = NagiosHostTemplate
+        fields = [
+            'name','use_template','check_command','max_check_attempts','notification_interval','notification_period','notification_options','notifications_enabled'
+        ]
+
+
+
+class NagiosHostTemplateCSVForm(forms.ModelForm):
+
+    class Meta:
+        model = NagiosHostTemplate
+        fields = NagiosHostTemplate.csv_headers
+        help_texts = {
+            'name': 'Name of the hostgroup',
+            'use_template': 'Extended name of the contacgroup',
+        }       
  
 
 
@@ -121,7 +143,6 @@ class NagiosServiceForm(BootstrapMixin, forms.ModelForm):
         ]
 
 
-
 class NagiosServiceCSVForm(forms.ModelForm):
 
     class Meta:
@@ -132,28 +153,27 @@ class NagiosServiceCSVForm(forms.ModelForm):
             'device': 'Device',
         }
         
-        
-# Nagios Platform     
 
-class NagiosPlatformForm(BootstrapMixin, forms.ModelForm):
+class NagiosTimePeriodForm(BootstrapMixin, forms.ModelForm):
     
     class Meta:
-        model = NagiosPlatform
+        model = NagiosTimePeriod
         fields = [
-            'name'
+            'id', 'name', 'alias', 'timespan'
         ]
 
 
 
-class NagiosPlatformCSVForm(forms.ModelForm):
+class NagiosTimePeriodCSVForm(forms.ModelForm):
 
     class Meta:
-        model = NagiosPlatform
-        fields = NagiosPlatform.csv_headers
+        model = NagiosTimePeriod
+        fields = NagiosTimePeriod.csv_headers
         help_texts = {
-            'name': 'Name of the platform',
-        }       
- 
-
+            'name': 'Name of the Timeperiod',
+            'alias': 'Description of the period',
+            'timespan': 'String that represents the timespan',
+        }
+     
 
 

@@ -40,6 +40,14 @@ urlpatterns = [
     path(r'nagios-hostgroups/<int:pk>/edit/', views.NagiosHostGroupEditView.as_view(), name='nagioshostgroup_edit'),
     path(r'nagios-hostgroups/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='nagioshostgroup_changelog', kwargs={'model': NagiosHostGroup}),
     
+    # Nagios hosttemplate
+    path(r'nagios-hosttemplates/', views.NagiosHostTemplateListView.as_view(), name='nagioshosttemplate_list'),
+    path(r'nagios-hosttemplates/add/', views.NagiosHostTemplateCreateView.as_view(), name='nagioshosttemplate_add'),
+    path(r'nagios-hosttemplates/import/', views.NagiosHostTemplateBulkImportView.as_view(), name='nagioshosttemplate_import'),
+    path(r'nagios-hosttemplates/delete/', views.NagiosHostTemplateBulkDeleteView.as_view(), name='nagioshosttemplate_bulk_delete'),
+    path(r'nagios-hosttemplates/<int:pk>/edit/', views.NagiosHostTemplateEditView.as_view(), name='nagioshosttemplate_edit'),
+    path(r'nagios-hosttemplates/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='nagioshosttemplate_changelog', kwargs={'model': NagiosHostTemplate}),
+    
     # Nagios services
     path(r'nagios-services/', views.NagiosServiceListView.as_view(), name='nagiosservice_list'),
     path(r'nagios-services/add/', views.NagiosServiceCreateView.as_view(), name='nagiosservice_add'),
@@ -49,15 +57,13 @@ urlpatterns = [
     path(r'nagios-services/<int:pk>/edit/', views.NagiosServiceEditView.as_view(), name='nagiosservice_edit'),
     path(r'nagios-services/<int:pk>/delete/', views.NagiosServiceDeleteView.as_view(), name='nagiosservice_delete'),
     path(r'nagios-services/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='nagiosservice_changelog', kwargs={'model': NagiosService}),
-    
-    #path(r'nagios-services/device/<int:device>/add/', views.NagiosServiceCreateView.as_view(), name='device_nagiosservice_add'),
 
-    # Nagios platform
-    path(r'nagios-platforms/', views.NagiosPlatformListView.as_view(), name='nagiosplatform_list'),
-    path(r'nagios-platforms/add/', views.NagiosPlatformCreateView.as_view(), name='nagiosplatform_add'),
-    path(r'nagios-platforms/import/', views.NagiosPlatformBulkImportView.as_view(), name='nagiosplatform_import'),
-    path(r'nagios-platforms/delete/', views.NagiosPlatformBulkDeleteView.as_view(), name='nagiosplatform_bulk_delete'),
-    path(r'nagios-platforms/<int:pk>/edit/', views.NagiosPlatformEditView.as_view(), name='nagiosplatform_edit'),
-    path(r'nagios-platforms/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='nagiosplatform_changelog', kwargs={'model': NagiosPlatform}),
+   # Nagios timeperiod
+    path(r'nagios-timeperiods/', views.NagiosTimePeriodListView.as_view(), name='nagiostimeperiod_list'),
+    path(r'nagios-timeperiods/add/', views.NagiosTimePeriodCreateView.as_view(), name='nagiostimeperiod_add'),
+    path(r'nagios-timeperiods/import/', views.NagiosTimePeriodBulkImportView.as_view(), name='nagiostimeperiod_import'),
+    path(r'nagios-timeperiods/delete/', views.NagiosTimePeriodBulkDeleteView.as_view(), name='nagiostimeperiod_bulk_delete'),
+    path(r'nagios-timeperiods/<int:pk>/edit/', views.NagiosTimePeriodEditView.as_view(), name='nagiostimeperiod_edit'),
+    path(r'nagios-timeperiods/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='nagiostimeperiod_changelog', kwargs={'model': NagiosTimePeriod}),
 
 ]

@@ -458,9 +458,18 @@
                                 </div>
                             {% endif %}
                             <a href="{% url 'nagios:nagioshostgroup_list' %}">Nagios Hostgroups</a>
-                        </li>                          
+                        </li>
+                        <li{% if not perms.nagios.view_nagioshosttemplate %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagioshosttemplate %}
+                                <div class="buttons pull-right">
+                                    <a href="{% url 'nagios:nagioshosttemplate_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagioshosttemplate_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                </div>
+                            {% endif %}
+                            <a href="{% url 'nagios:nagioshosttemplate_list' %}">Nagios Hosttemplates</a>
+                        </li>                             
                         <li{% if not perms.nagios.view_nagiosservice %} class="disabled"{% endif %}>
-                            {% if perms.nagios.add_nagiosservoice %}
+                            {% if perms.nagios.add_nagiosservice %}
                                 <div class="buttons pull-right">
                                     <a href="{% url 'nagios:nagiosservice_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
                                     <a href="{% url 'nagios:nagiosservice_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
@@ -468,14 +477,14 @@
                             {% endif %}
                             <a href="{% url 'nagios:nagiosservice_list' %}">Nagios Services</a>
                         </li>
-                        <li{% if not perms.nagios.view_nagiosplatform %} class="disabled"{% endif %}>
-                            {% if perms.nagios.add_nagiosservoice %}
+                        <li{% if not perms.nagios.view_nagiostimeperiod %} class="disabled"{% endif %}>
+                            {% if perms.nagios.add_nagiostimeperiod %}
                                 <div class="buttons pull-right">
-                                    <a href="{% url 'nagios:nagiosplatform_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
-                                    <a href="{% url 'nagios:nagiosplatform_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
+                                    <a href="{% url 'nagios:nagiostimeperiod_add' %}" class="btn btn-xs btn-success" title="Add"><i class="fa fa-plus"></i></a>
+                                    <a href="{% url 'nagios:nagiostimeperiod_import' %}" class="btn btn-xs btn-info" title="Import"><i class="fa fa-download"></i></a>
                                 </div>
                             {% endif %}
-                            <a href="{% url 'nagios:nagiosplatform_list' %}">Nagios Platforms</a>
+                            <a href="{% url 'nagios:nagiostimeperiod_list' %}">Nagios Timeperiods</a>
                         </li>
                     </ul>
                 </li>

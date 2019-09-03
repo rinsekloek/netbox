@@ -1342,7 +1342,7 @@ class DeviceForm(BootstrapMixin, TenancyForm, CustomFieldForm):
         fields = [
             'name', 'device_role', 'device_type', 'serial', 'asset_tag', 'site', 'rack', 'position', 'face',
             'status', 'platform', 'primary_ip4', 'primary_ip6', 'cluster_group', 'cluster', 'tenant_group', 'tenant',
-            'comments', 'tags', 'local_context_data'
+            'comments', 'tags', 'local_context_data', 'nagios_enabled', 'nagios_hosttemplate', 'nagios_hostgroup', 'nagios_contactgroup', 'nagios_parents'
         ]
         help_texts = {
             'device_role': "The function this device serves",
