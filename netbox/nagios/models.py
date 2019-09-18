@@ -57,8 +57,8 @@ class NagiosContact(ChangeLoggedModel):
     def name(self):
         return '%s' % (self.alias.replace(" ", "_").replace("-", "_").lower())
         
-    def get_absolute_url(self):
-        return reverse('nagios:nagioscontact', args=[self.pk])
+    #def get_absolute_url(self):
+        #return reverse('nagios:nagioscontact', args=[self.pk])
         
 
 class NagiosContactGroup(ChangeLoggedModel):
