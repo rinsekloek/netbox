@@ -8,7 +8,7 @@ from django.urls import reverse
 from taggit.managers import TaggableManager
 
 from dcim.models import *
-from extras.models import CustomFieldModel, ObjectChange, TaggedItem, ConfigContextModel
+# from extras.models import CustomFieldModel, ObjectChange
 from utilities.models import ChangeLoggedModel
 from utilities.utils import serialize_object
 
@@ -27,7 +27,7 @@ class NagiosCheck(ChangeLoggedModel):
         db_table = 'nagios_checks'
         
     def __str__(self):
-        return '%s ' % (self.check_name)
+        return '%s' % (self.check_name)
     
 
 
@@ -51,7 +51,11 @@ class NagiosContact(ChangeLoggedModel):
         db_table = 'nagios_contacts'
         
     def __str__(self):
-        return '%s ' % (self.alias)
+        #return '%s ' % (self.alias)
+        return self.name()
+        
+    def name(self):
+        return '%s' % (self.alias.replace(" ", "_").replace("-", "_").lower())
         
     def get_absolute_url(self):
         return reverse('nagios:nagioscontact', args=[self.pk])
@@ -71,7 +75,7 @@ class NagiosContactGroup(ChangeLoggedModel):
         db_table = 'nagios_contactgroups'
         
     def __str__(self):
-        return '%s ' % (self.name)
+        return '%s' % (self.name)
         
 
 
@@ -89,7 +93,7 @@ class NagiosHostGroup(ChangeLoggedModel):
         db_table = 'nagios_hostgroups'
         
     def __str__(self):
-        return '%s ' % (self.name)
+        return '%s' % (self.name)
 
 
 class NagiosHostTemplate(ChangeLoggedModel):
@@ -110,7 +114,7 @@ class NagiosHostTemplate(ChangeLoggedModel):
         db_table = 'nagios_hosttemplates'
         
     def __str__(self):
-        return '%s ' % (self.name)
+        return '%s' % (self.name)
 
 class NagiosTimePeriod(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
@@ -125,7 +129,7 @@ class NagiosTimePeriod(ChangeLoggedModel):
         db_table = 'nagios_timeperiods'
 
     def __str__(self):
-        return '%s ' % (self.name)
+        return '%s' % (self.name)
 
 class NagiosService(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
@@ -155,10 +159,17 @@ class NagiosService(ChangeLoggedModel):
         db_table = 'nagios_services'
     
     def __str__(self):
-        return '%s ' % (self.name)
+        return '%s' % (self.name)
         
     def get_absolute_url(self):
         return reverse('nagios:nagiosservice', args=[self.pk])
+        
+    def to_csv(self):
+        return (
+            self.pk,
+            self.name,
+            self.device
+        )
         
     @property
     def parent(self):

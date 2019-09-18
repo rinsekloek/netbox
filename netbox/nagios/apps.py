@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class NagiosConfig(AppConfig):
-    name = 'nagios'
+class DCIMConfig(AppConfig):
+    name = "nagios"
+    verbose_name = "NAGIOS"

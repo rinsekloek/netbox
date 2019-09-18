@@ -25,7 +25,7 @@ from utilities.paginator import EnhancedPaginator
 from utilities.utils import csv_format
 from utilities.views import (
     BulkComponentCreateView, BulkDeleteView, BulkEditView, BulkImportView, ComponentCreateView, GetReturnURLMixin,
-    ObjectDeleteView, ObjectEditView, ObjectListView,
+    ObjectDeleteView, ObjectEditView, ObjectListView
 )
 from virtualization.models import VirtualMachine
 from . import filters, forms, tables

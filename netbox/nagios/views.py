@@ -8,8 +8,10 @@ from django_tables2 import RequestConfig
 from dcim.models import Device
 from dcim.tables import DeviceTable
 from extras.views import ObjectConfigContextView
+from utilities.utils import csv_format
 from utilities.views import (
-    BulkCreateView, BulkDeleteView, BulkEditView, BulkImportView, ObjectDeleteView, ObjectEditView, ObjectListView,
+    BulkComponentCreateView, BulkDeleteView, BulkEditView, BulkImportView, ComponentCreateView, GetReturnURLMixin,
+    ObjectDeleteView, ObjectEditView, ObjectListView,
 )
 from . import forms, tables
 from .models import *

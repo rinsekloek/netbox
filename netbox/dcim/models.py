@@ -1602,7 +1602,6 @@ class Device(ChangeLoggedModel, ConfigContextModel, CustomFieldModel):
     nagios_parents = models.ManyToManyField(
         to='self',
         related_name='devices',
-        blank=True,
         verbose_name='Nagios Device Parents'
     )  
     
@@ -1781,20 +1780,6 @@ class Device(ChangeLoggedModel, ConfigContextModel, CustomFieldModel):
     def to_csv(self):
         return (
             self.name or '',
-            self.device_role.name,
-            self.tenant.name if self.tenant else None,
-            self.device_type.manufacturer.name,
-            self.device_type.model,
-            self.platform.name if self.platform else None,
-            self.serial,
-            self.asset_tag,
-            self.get_status_display(),
-            self.site.name,
-            self.rack.group.name if self.rack and self.rack.group else None,
-            self.rack.name if self.rack else None,
-            self.position,
-            self.get_face_display(),
-            self.comments,
         )
 
     @property
