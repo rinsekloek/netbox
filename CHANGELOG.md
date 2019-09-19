@@ -1,4 +1,4 @@
-v2.6.4 (FUTURE)
+v2.6.4 (2019-09-19)
 
 ## Enhancements
 
@@ -6,11 +6,16 @@ v2.6.4 (FUTURE)
 * [#3027](https://github.com/netbox-community/netbox/issues/3028) - Add `local_context_data` boolean filter for devices
 * [#3318](https://github.com/netbox-community/netbox/issues/3318) - Increase length of platform name and slug to 100 characters
 * [#3341](https://github.com/netbox-community/netbox/issues/3341) - Enable inline VLAN assignment while editing an interface
+* [#3485](https://github.com/netbox-community/netbox/issues/3485) - Enable embedded graphs for devices
+* [#3510](https://github.com/netbox-community/netbox/issues/3510) - Add minimum/maximum prefix length enforcement for `IPNetworkVar`
 
 ## Bug Fixes
 
 * [#3489](https://github.com/netbox-community/netbox/issues/3489) - Prevent exception triggered by webhook upon object deletion
 * [#3501](https://github.com/netbox-community/netbox/issues/3501) - Fix rendering of checkboxes on custom script forms
+* [#3511](https://github.com/netbox-community/netbox/issues/3511) - Correct API URL for nested device bays
+* [#3513](https://github.com/netbox-community/netbox/issues/3513) - Fix assignment of tags when creating front/rear ports
+* [#3514](https://github.com/netbox-community/netbox/issues/3514) - Label TextVar fields when rendering custom script forms
 
 v2.6.3 (2019-09-04)
 

@@ -809,6 +809,7 @@ class DeviceTypeForm(BootstrapMixin, CustomFieldForm):
     slug = SlugField(
         slug_source='model'
     )
+    comments = CommentField()
     tags = TagField(
         required=False
     )
@@ -1358,7 +1359,10 @@ class DeviceForm(BootstrapMixin, TenancyForm, CustomFieldForm):
     )
     comments = CommentField()
     tags = TagField(required=False)
-    local_context_data = JSONField(required=False)
+    local_context_data = JSONField(
+        required=False,
+        label=''
+    )
 
     class Meta:
         model = Device
@@ -2328,7 +2332,6 @@ class InterfaceCreateForm(InterfaceCommonForm, ComponentForm, forms.Form):
 
         self.fields['untagged_vlan'].choices = vlan_choices
         self.fields['tagged_vlans'].choices = vlan_choices
-
 
 
 class InterfaceBulkEditForm(InterfaceCommonForm, BootstrapMixin, AddRemoveTagsForm, BulkEditForm):
