@@ -345,7 +345,15 @@ SITE_STATUS_CHOICES = [
     [SITE_STATUS_RETIRED, 'Retired'],
 ]
 
-# Bootstrap CSS classes for device/rack statuses
+# Nagios statuses
+NAGIOS_STATUS_DISABLED = 0
+NAGIOS_STATUS_ACTIVE = 1
+NAGIOS_STATUS_CHOICES = [
+    [NAGIOS_STATUS_ACTIVE, 'Active'],
+    [NAGIOS_STATUS_DISABLED, 'Disabled'],
+]
+
+# Bootstrap CSS classes for device/rack/nagios statuses
 STATUS_CLASSES = {
     0: 'warning',
     1: 'success',

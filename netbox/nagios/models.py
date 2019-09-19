@@ -77,6 +77,9 @@ class NagiosContactGroup(ChangeLoggedModel):
     def __str__(self):
         return '%s' % (self.name)
         
+    def get_absolute_url(self):
+        return reverse('nagios:nagioscontactgroup_edit', args=[self.pk])
+        
 
 
 class NagiosHostGroup(ChangeLoggedModel):
@@ -94,6 +97,9 @@ class NagiosHostGroup(ChangeLoggedModel):
         
     def __str__(self):
         return '%s' % (self.name)
+    
+    def get_absolute_url(self):
+        return reverse('nagios:nagioshostgroup_edit', args=[self.pk])
 
 
 class NagiosHostTemplate(ChangeLoggedModel):
@@ -115,6 +121,9 @@ class NagiosHostTemplate(ChangeLoggedModel):
         
     def __str__(self):
         return '%s' % (self.name)
+        
+    def get_absolute_url(self):
+        return reverse('nagios:nagioshosttemplate_edit', args=[self.pk])
 
 class NagiosTimePeriod(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
@@ -133,12 +142,12 @@ class NagiosTimePeriod(ChangeLoggedModel):
 
 class NagiosService(ChangeLoggedModel):
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=255, verbose_name='Template name', blank=True, null=True)
+    name = models.CharField(max_length=255, verbose_name='Template name', blank=True, null=True, unique=True)
     use_template = models.ForeignKey('self', on_delete=models.CASCADE, db_column='use_template', null=True, blank=True, verbose_name='Inherits from template')
     device = models.ForeignKey(to='dcim.Device', on_delete=models.CASCADE, db_column='server', blank=True, null=True, related_name='nagiosservices', verbose_name='device'  )
     service_description = models.CharField(max_length=255,verbose_name='Service Description')
-    active_checks_enabled = models.BooleanField(blank=True, null=True)
-    passive_checks_enabled = models.BooleanField(blank=True, null=True)
+    active_checks_enabled = models.BooleanField()
+    passive_checks_enabled = models.BooleanField()
     check_command = models.ForeignKey(NagiosCheck, models.DO_NOTHING, db_column='check_command', blank=True, null=True)
     check_command_params = models.CharField(max_length=255, blank=True, null=True)
     max_check_attempts = models.IntegerField(blank=True, null=True)
@@ -147,7 +156,7 @@ class NagiosService(ChangeLoggedModel):
     notification_interval = models.SmallIntegerField(blank=True, null=True)
     notification_period = models.ForeignKey(NagiosTimePeriod, models.DO_NOTHING, db_column='notification_period', blank=True, null=True, related_name='notification_period' )
     notification_options = models.CharField(max_length=64, blank=True, null=True)
-    notifications_enabled = models.BooleanField(blank=True, null=True)
+    notifications_enabled = models.BooleanField()
     check_period = models.ForeignKey(NagiosTimePeriod, models.DO_NOTHING, db_column='check_period', related_name='check_period', blank=True, null=True)
     event_handler = models.CharField(max_length=255, blank=True, null=True)
     contact_groups = models.ManyToManyField(NagiosContactGroup)  
@@ -159,7 +168,7 @@ class NagiosService(ChangeLoggedModel):
         db_table = 'nagios_services'
     
     def __str__(self):
-        return '%s' % (self.name)
+        return '%s' % (self.service_description)
         
     def get_absolute_url(self):
         return reverse('nagios:nagiosservice', args=[self.pk])

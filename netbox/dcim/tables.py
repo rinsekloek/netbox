@@ -145,6 +145,10 @@ STATUS_LABEL = """
 <span class="label label-{{ record.get_status_class }}">{{ record.get_status_display }}</span>
 """
 
+NAGIOS_ENABLED_LABEL = """
+<span class="label label-{{ record.get_nagios_status_class }}">{{ record.get_nagios_enabled_display }}</span>
+"""
+
 TYPE_LABEL = """
 <span class="label label-{{ record.get_type_class }}">{{ record.get_type_display }}</span>
 """
@@ -545,6 +549,7 @@ class DeviceTable(BaseTable):
         template_code=DEVICE_LINK
     )
     status = tables.TemplateColumn(template_code=STATUS_LABEL, verbose_name='Status')
+    nagios_enabled = tables.TemplateColumn(template_code=NAGIOS_ENABLED_LABEL, verbose_name='Nagios Enabled')
     tenant = tables.TemplateColumn(template_code=COL_TENANT)
     site = tables.LinkColumn('dcim:site', args=[Accessor('site.slug')])
     rack = tables.LinkColumn('dcim:rack', args=[Accessor('rack.pk')])

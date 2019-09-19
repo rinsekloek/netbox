@@ -32,6 +32,12 @@ NAGIOSSERVICE_ACTIONS = """
 {% endif %}
 """
 
+NAGIOSSERVICE_LINK = """
+<a href="{% url 'nagios:nagiosservice' pk=record.pk %}">
+    {{ record.service_description|default:'<span class="label label-info">Unnamed Service</span>' }}
+</a>
+"""
+
 NAGIOSCONTACTGROUP_ACTIONS = """
 <a href="{% url 'nagios:nagioscontactgroup_changelog' pk=record.pk %}" class="btn btn-default btn-xs" title="Changelog">
     <i class="fa fa-history"></i>
@@ -160,8 +166,13 @@ class NagiosHostTemplateTable(BaseTable):
          
 class NagiosServiceTable(BaseTable):
     pk = ToggleColumn()
+    
+    service_description = tables.TemplateColumn(
+        template_code=NAGIOSSERVICE_LINK
+    )
+    
     use_template = tables.LinkColumn(
-        viewname='nagios:nagiosservice_edit',
+        viewname='nagios:nagiosservice',
         args=[Accessor('pk')]
     )
     
@@ -169,7 +180,7 @@ class NagiosServiceTable(BaseTable):
         viewname='dcim:device',
         args=[Accessor('device.pk')]
     )
-    
+
     actions = tables.TemplateColumn(
         template_code=NAGIOSSERVICE_ACTIONS,
         attrs={'td': {'class': 'text-right noprint'}},
@@ -178,7 +189,7 @@ class NagiosServiceTable(BaseTable):
 
     class Meta(BaseTable.Meta):
         model = NagiosService
-        fields = ('pk', 'name', 'use_template', 'device', 'service_description','contact_groups')
+        fields = ('pk', 'device', 'service_description', 'name', 'use_template', 'contact_groups')
 
         
 class NagiosTimePeriodTable(BaseTable):

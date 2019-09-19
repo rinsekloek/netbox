@@ -199,7 +199,6 @@ class NagiosServiceView(PermissionRequiredMixin, View):
     def get(self, request, pk):
     
         nagiosservice = get_object_or_404(NagiosService, pk=pk)
-        
         return render(request, 'nagios/nagiosservice.html', {
             'nagiosservice': nagiosservice,
         })
@@ -210,20 +209,17 @@ class NagiosServiceCreateView(PermissionRequiredMixin, ObjectEditView):
     model = NagiosService
     model_form = forms.NagiosServiceForm
     template_name = 'nagios/nagiosservice_edit.html'
+    default_return_url = 'nagios:nagiosservice_list'
     
     def alter_obj(self, obj, request, url_args, url_kwargs):
         if 'device' in url_kwargs:
             obj.device = get_object_or_404(Device, pk=url_kwargs['device'])
         return obj
 
-        
-    def get_return_url(self, request, nagiosservice):
-        if nagiosservice.parent:
-            return nagiosservice.parent.get_absolute_url()
-
 
 class NagiosServiceEditView(NagiosServiceCreateView):
     permission_required = 'nagios.change_nagiosservice'
+    default_return_url = 'nagios:nagiosservice_list'
 
     
 class NagiosServiceDeleteView(PermissionRequiredMixin, ObjectDeleteView):

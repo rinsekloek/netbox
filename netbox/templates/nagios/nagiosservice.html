@@ -3,27 +3,29 @@
 {% load helpers %}
 
 {% block content %}
-<div class="row noprint">
-    <div class="col-sm-8 col-md-9">
+    <div class="row noprint">
+        <div class="col-sm-8 col-md-9">
         <ol class="breadcrumb">
-            <li><a href="{% url 'nagios:nagiosservice_list' %}">nagiosservices</a></li>
-            <li><a href="{{ nagiosservice.parent.get_absolute_url }}">{{ nagiosservice.parent }}</a></li>
+            
+            {% if nagiosservice.device %}
+                <li>{{ nagiosservice.device }}</li>
+            {% endif %}
             <li>{{ nagiosservice }}</li>
         </ol>
+        </div>
+        <div class="col-sm-4 col-md-3">
+            <form action="{% url 'dcim:device_list' %}" method="get">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search devices" />
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search" aria-hidden="true"></span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="col-sm-4 col-md-3">
-        <form action="{% url 'nagios:nagiosservice_list' %}" method="get">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search nagiosservices" />
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-primary">
-                        <span class="fa fa-search" aria-hidden="true"></span>
-                    </button>
-                </span>
-            </div>
-        </form>
-    </div>
-</div>
 {% if perms.dcim.change_nagiosservice %}
     <div class="pull-right">
         <a href="{% url 'nagios:nagiosservice_edit' pk=nagiosservice.pk %}" class="btn btn-warning">
@@ -37,49 +39,113 @@
 <div class="pull-right noprint">
     {% custom_links nagiosservice %}
 </div>
+
 <div class="row">
 	<div class="col-md-6">
         <div class="panel panel-default">
+        
             <div class="panel-heading">
-                <strong>nagiosservice</strong>
+                <strong>Nagios Service</strong>
             </div>
+            
             <table class="table table-hover panel-body attr-table">
                 <tr>
-                    <td>Name</td>
+                    <td>Device</td>
+                    <td><a href="{{ nagiosservice.device.get_absolute_url }}">{{ nagiosservice.device }}<a/></td>
+                </tr>
+                <tr>
+                    <td>Inherit From</td>
+                    <td>
+                        <a href="{{ nagiosservice.get_absolute_url }}">{{ nagiosservice.use_template }}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Template Name</td>
                     <td>{{ nagiosservice.name }}</td>
                 </tr>
                 <tr>
-                    <td>Parent</td>
-                    <td>
-                        <a href="{{ nagiosservice.parent.get_absolute_url }}">{{ nagiosservice.parent }}</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Protocol</td>
-                    <td>{{ nagiosservice.get_protocol_display }}</td>
-                </tr>
-                <tr>
-                    <td>Port</td>
-                    <td>{{ nagiosservice.port }}</td>
-                </tr>
-                <tr>
-                    <td>IP Addresses</td>
-                    <td>
-                        {% for ipaddress in nagiosservice.ipaddresses.all %}
-                            <a href="{{ ipaddress.get_absolute_url }}">{{ ipaddress }}</a><br />
-                        {% empty %}
-                            <span class="text-muted">None</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td>{{ nagiosservice.description|placeholder }}</td>
+                    <td>Service Description</td>
+                    <td>{{ nagiosservice.service_description }}</td>
                 </tr>
 		    </table>
         </div>
-        {% include 'inc/custom_fields_panel.html' with obj=nagiosservice %}
-        {% include 'extras/inc/tags_panel.html' with tags=nagiosservice.tags.all url='nagios:nagiosservice_list' %}
+        <div class="panel panel-default">     
+            
+            <div class="panel-heading">
+                <strong>Check Settings </strong>
+            </div>
+            
+            <table class="table table-hover panel-body attr-table">
+                <tr>
+                    <td>Notifications Enabled </td>
+                    <td>{{ nagiosservice.notifications_enabled }}</td>
+                </tr>
+                <tr>
+                    <td>Notification Interval</td>
+                    <td>{{ nagiosservice.notification_interval }}</td>
+                </tr>
+                <tr>
+                    <td>Notification Period</td>
+                    <td>{{ nagiosservice.notification_period }}</td>
+                </tr>
+                <tr>
+                    <td>Notification Options</td>
+                    <td>{{ nagiosservice.notification_options }}</td>
+                </tr>
+                <tr>
+                    <td>Event Handler</td>
+                    <td>{{ nagiosservice.event_handler }}</td>
+                </tr>
+                <tr>
+                    <td>Contactgroups</td>
+                    <td>{{ nagiosservice.contact_groups }}</td>
+                </tr>
+		    </table>
+        </div>
+       
+    </div>
+    <div class="col-md-6">
+         <div class="panel panel-default">    
+            
+            <div class="panel-heading">
+                <strong>Notification Settings </strong>
+            </div>
+            
+            <table class="table table-hover panel-body attr-table">
+                <tr>
+                    <td>Active Checks Enabled </td>
+                    <td>{{ nagiosservice.active_checks_enabled }}</td>
+                </tr>
+                <tr>
+                    <td>Passive Checks Enabled</td>
+                    <td>{{ nagiosservice.passive_checks_enabled }}</td>
+                </tr>
+                <tr>
+                    <td>Check Command</td>
+                    <td>{{ nagiosservice.check_command }}</td>
+                </tr>
+                <tr>
+                    <td>Check Command Parameters</td>
+                    <td>{{ nagiosservice.check_command_params }}</td>
+                </tr>
+                <tr>
+                    <td>Check Period</td>
+                    <td>{{ nagiosservice.check_period }}</td>
+                </tr>
+                <tr>
+                    <td>Service Description</td>
+                    <td>{{ nagiosservice.max_check_attempts }}</td>
+                </tr>
+                <tr>
+                    <td>Normal Check Interval Name</td>
+                    <td>{{ nagiosservice.normal_check_interval }}</td>
+                </tr>
+                <tr>
+                    <td>Retry Check Interval</td>
+                    <td>{{ nagiosservice.retry_check_interval }}</td>
+                </tr>
+		    </table>
+        </div>
 	</div>
 </div>
 {% endblock %}

@@ -301,33 +301,47 @@
                 </div>
                 <table class="table table-hover panel-body attr-table">
                      <tr>
-                        <td>Nagios Enabled</td>
+                        <td>Nagios Status</td>
                         <td>
-                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_enabled }}</span>
+                            <span class="label label-{{ device.get_nagios_status_class }}">{{ device.get_nagios_enabled_display }}</span>
                         </td>
                     </tr>
                     <tr>
                         <td>Nagios Hosttemplate</td>
                         <td>
-                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_hosttemplate }}</span>
+                            {% if device.nagios_hosttemplate %}
+                               <a href="{{ device.nagios_hosttemplate.get_absolute_url }}">{{ device.nagios_hosttemplate }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
                         <td>Nagios Hostgroup</td>
                         <td>
-                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_hostgroup }}</span>
+                            {% if device.nagios_hostgroup %}
+                               <a href="{{ device.nagios_hostgroup.get_absolute_url }}">{{ device.nagios_hostgroup }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
                         <td>Nagios Contactgroup</td>
                         <td>
-                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_contactgroup }}</span>
+                            {% if device.nagios_contactgroup %}
+                               <a href="{{ device.nagios_contactgroup.get_absolute_url }}">{{ device.nagios_contactgroup }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
                         <td>Nagios Parent Devices</td>
                         <td>
-                            <span class="label label-{{ device.get_status_class }}">{{ device.nagios_parents }}</span>
+                            {% for parent in device.nagios_parents.all %}
+                                <a href="{{ parent.get_absolute_url }}">{{ parent }}</a><br>
+                            {% endfor %}
                         </td>
                     </tr>
                 </table>

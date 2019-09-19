@@ -1572,10 +1572,11 @@ class Device(ChangeLoggedModel, ConfigContextModel, CustomFieldModel):
     )
     
     # Nagios Fields
-    nagios_enabled =  models.BooleanField(
-        default=False,
+    nagios_enabled =  models.PositiveSmallIntegerField(
+        choices=NAGIOS_STATUS_CHOICES,
+        default=NAGIOS_STATUS_ACTIVE,
         verbose_name='Nagios Services Enabled',
-        help_text='Set to yes to enable nagios check for this device'
+        help_text='Set to Active to enable nagios checks for this device'
     )
     nagios_hosttemplate = models.ForeignKey(
         to='nagios.NagiosHostTemplate',
@@ -1853,7 +1854,10 @@ class Device(ChangeLoggedModel, ConfigContextModel, CustomFieldModel):
 
     def get_status_class(self):
         return STATUS_CLASSES[self.status]
-
+        
+    def get_nagios_status_class(self):
+        return STATUS_CLASSES[self.nagios_enabled]
+      
 
 #
 # Console ports
