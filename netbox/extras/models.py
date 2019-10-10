@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from datetime import date
 
+import graphviz
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -11,7 +12,6 @@ from django.db.models import F, Q
 from django.http import HttpResponse
 from django.template import Template, Context
 from django.urls import reverse
-import graphviz
 from jinja2 import Environment
 from taggit.models import TagBase, GenericTaggedItemBase
 
@@ -435,14 +435,19 @@ class ExportTemplate(models.Model):
         choices=TEMPLATE_LANGUAGE_CHOICES,
         default=TEMPLATE_LANGUAGE_JINJA2
     )
-    template_code = models.TextField()
+    template_code = models.TextField(
+        help_text='The list of objects being exported is passed as a context variable named <code>queryset</code>.'
+    )
     mime_type = models.CharField(
         max_length=50,
-        blank=True
+        blank=True,
+        verbose_name='MIME type',
+        help_text='Defaults to <code>text/plain</code>'
     )
     file_extension = models.CharField(
         max_length=15,
-        blank=True
+        blank=True,
+        help_text='Extension to append to the rendered filename'
     )
 
     class Meta:
@@ -800,7 +805,10 @@ class ConfigContext(models.Model):
 
 
 class ConfigContextModel(models.Model):
-
+    """
+    A model which includes local configuration context data. This local data will override any inherited data from
+    ConfigContexts.
+    """
     local_context_data = JSONField(
         blank=True,
         null=True,
@@ -824,6 +832,16 @@ class ConfigContextModel(models.Model):
             data = deepmerge(data, self.local_context_data)
 
         return data
+
+    def clean(self):
+
+        super().clean()
+
+        # Verify that JSON data is provided as an object
+        if self.local_context_data and type(self.local_context_data) is not dict:
+            raise ValidationError(
+                {'local_context_data': 'JSON data must be in object form. Example: {"foo": 123}'}
+            )
 
 
 #
