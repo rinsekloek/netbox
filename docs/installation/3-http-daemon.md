@@ -32,7 +32,6 @@ server {
         proxy_set_header X-Forwarded-Host $server_name;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
-        add_header P3P 'CP="ALL DSP COR PSAa PSDa OUR NOR ONL UNI COM NAV"';
     }
 }
 ```
@@ -108,7 +107,7 @@ Install gunicorn:
 # pip3 install gunicorn
 ```
 
-Save the following configuration in the root netbox installation path as `gunicorn_config.py` (e.g. `/opt/netbox/gunicorn_config.py` per our example installation). Be sure to verify the location of the gunicorn executable on your server (e.g. `which gunicorn`) and to update the `pythonpath` variable if needed. If using CentOS/RHEL, change the username from `www-data` to `nginx` or `apache`.
+Save the following configuration in the root netbox installation path as `gunicorn_config.py` (e.g. `/opt/netbox/gunicorn_config.py` per our example installation). Be sure to verify the location of the gunicorn executable on your server (e.g. `which gunicorn`) and to update the `pythonpath` variable if needed. If using CentOS/RHEL, change the username from `www-data` to `nginx` or `apache`. More info on `max_requests` can be found in the [gunicorn docs](https://docs.gunicorn.org/en/stable/settings.html#max-requests).
 
 ```no-highlight
 command = '/usr/bin/gunicorn'
@@ -116,6 +115,8 @@ pythonpath = '/opt/netbox/netbox'
 bind = '127.0.0.1:8001'
 workers = 3
 user = 'www-data'
+max_requests = 5000
+max_requests_jitter = 500
 ```
 
 # supervisord Installation
